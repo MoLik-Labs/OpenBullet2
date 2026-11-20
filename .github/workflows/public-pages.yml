@@ -1,0 +1,49 @@
+name: Publish Molik Public Web to Pages
+
+on:
+  push:
+    branches: [master, arena/a881a909-openbullet2]
+    paths:
+      - 'molik-desktop/ui/**'
+      - 'molik-desktop/scripts/package-public.py'
+      - 'molik-desktop/LICENSE'
+      - '.github/workflows/public-pages.yml'
+  workflow_dispatch:
+
+permissions: {}
+concurrency:
+  group: molik-public-pages
+  cancel-in-progress: false
+
+jobs:
+  site:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Build only the browser-local site
+        run: |
+          python3 molik-desktop/scripts/package-public.py "$RUNNER_TEMP/site.zip"
+          unzip -q "$RUNNER_TEMP/site.zip" -d "$RUNNER_TEMP/public-site"
+          test -f "$RUNNER_TEMP/public-site/index.html"
+          grep -q 'data-mode="public"' "$RUNNER_TEMP/public-site/index.html"
+          test ! -e "$RUNNER_TEMP/public-site/cgi-bin"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ runner.temp }}/public-site
+  deploy:
+    needs: site
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy static artifact
+        id: deployment
+        uses: actions/deploy-pages@v4
