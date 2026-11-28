@@ -1,0 +1,81 @@
+---
+// Adapted from Nimbus Steps (MIT). We only wrap ordered lists rendered from
+// trusted handbook content; no client script or runtime framework is needed.
+---
+<div class="steps" data-steps><slot /></div>
+
+<style>
+  .steps {
+    --_start: var(--steps-start, 1);
+    --_marker: 1.75rem;
+    margin: 1.5rem 0;
+  }
+
+  .steps > :global(ol) {
+    counter-reset: step calc(var(--_start) - 1);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* A padded item with a positioned number, so inline code and links flow
+     on the first line like any paragraph. */
+  .steps > :global(ol > li) {
+    counter-increment: step;
+    position: relative;
+    min-height: var(--_marker);
+    /* Cancel the prose li margin — step rhythm comes from padding. */
+    margin: 0;
+    padding-block: 0 1.5rem;
+    padding-inline: calc(var(--_marker) + 0.75rem) 0;
+  }
+
+  .steps > :global(ol > li:last-child) {
+    padding-bottom: 0;
+  }
+
+  /* Number marker, centred on the first line of text. */
+  .steps > :global(ol > li)::before {
+    content: counter(step);
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0;
+    top: max(0px, calc((1lh - var(--_marker)) / 2));
+    width: var(--_marker);
+    height: var(--_marker);
+    border-radius: .45rem;
+    background: var(--sl-color-accent-low);
+    color: var(--sl-color-white);
+    border: 1px solid var(--sl-color-accent);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1;
+    display: grid;
+    place-items: center;
+    z-index: 1;
+  }
+
+  /* Connecting line — runs from below the marker to the bottom of the step. */
+  .steps > :global(ol > li:not(:last-child))::after {
+    content: "";
+    position: absolute;
+    inset-inline-start: calc(var(--_marker) / 2 - 0.75px);
+    top: var(--_marker);
+    top: calc(max(0px, (1lh - var(--_marker)) / 2) + var(--_marker));
+    bottom: 0;
+    width: 1.5px;
+    background: var(--sl-color-gray-5);
+  }
+
+  .steps > :global(ol > li > p:first-child > strong:only-child) {
+    color: var(--sl-color-white);
+  }
+
+  .steps > :global(ol > li > p) {
+    margin: 0;
+  }
+
+  .steps > :global(ol > li > * + *) {
+    margin-top: 0.5rem;
+  }
+</style>

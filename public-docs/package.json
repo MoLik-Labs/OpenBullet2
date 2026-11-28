@@ -1,0 +1,8 @@
+{
+  "name": "molik-public-docs",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24.0.0" },
+  "scripts": { "dev": "astro dev", "build": "astro build" },
+  "dependencies": { "@astrojs/starlight": "0.39.3", "astro": "6.4.8" }
+}

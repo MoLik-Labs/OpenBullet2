@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en" data-mode="workspace">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="color-scheme" content="dark" />
+        <title>Molik Bullet Workspace</title>
+        <link rel="icon" href="mark.svg" />
+        <link rel="stylesheet" href="style.css" />
+        <script src="manifest-engine.js" defer></script>
+        <script src="app.js" defer></script>
+        <script src="compare.js" defer></script>
+    </head>
+    <body>
+        <a class="skip" href="#main">Skip to workspace</a>
+        <aside class="rail">
+            <div class="brand">
+                <img src="mark.svg" width="36" height="36" alt="" /> Molik
+                Bullet
+            </div>
+            <p class="label">WORKSPACE</p>
+            <nav aria-label="Workspace">
+                <a href="#inspection">Package inspection</a
+                ><a href="#compare">Compare manifests</a
+                ><a href="#integrity">File integrity</a
+                ><a href="#activity">Session activity</a
+                ><a href="#appearance">Appearance</a>
+            </nav>
+            <div class="runtime">
+                <i></i><span id="edition">Workspace</span>
+            </div>
+        </aside>
+        <main id="main" tabindex="-1">
+            <header>
+                <span
+                    >Workspace <b>/</b>
+                    <strong id="breadcrumb">Package inspection</strong></span
+                ><span class="badge">READ ONLY</span>
+            </header>
+            <section id="inspection" class="view">
+                <p class="label">01 / RELEASE TOOLS</p>
+                <h1 tabindex="-1">Package inspection</h1>
+                <p class="lead" id="intro">
+                    Check a release manifest without executing the package.
+                </p>
+                <div class="actions">
+                    <button id="choose" hidden>Choose package folder</button
+                    ><button id="refresh" class="secondary" disabled>
+                        Refresh report
+                    </button>
+                </div>
+                <p id="message" role="status">Connecting to workspace…</p>
+                <dl>
+                    <div>
+                        <dt>VERDICT</dt>
+                        <dd id="verdict">Not attached</dd>
+                    </div>
+                    <div>
+                        <dt>VERSION</dt>
+                        <dd id="version">—</dd>
+                    </div>
+                    <div>
+                        <dt>ENTRIES CHECKED</dt>
+                        <dd id="checked">—</dd>
+                    </div>
+                </dl>
+                <article>
+                    <div class="heading">
+                        <h2>Findings</h2>
+                        <span id="count" class="badge">No report</span>
+                    </div>
+                    <p id="detail">No inspection yet.</p>
+                    <label for="filter">Filter displayed findings</label
+                    ><input
+                        id="filter"
+                        type="search"
+                        placeholder="File name or reason"
+                        disabled
+                    />
+                    <ul id="findings"></ul>
+                    <p id="empty"></p>
+                </article>
+                <p class="note">
+                    Top-level checks only. UserData is excluded. This report
+                    does not certify upgrade safety.
+                </p>
+            </section>
+            <section id="compare" class="view" hidden>
+                <p class="label">RELEASE TOOLS / LOCAL ONLY</p><h1 tabindex="-1">Compare manifests</h1>
+                <p class="lead">See which names were added or removed between two releases. Both files stay in this window.</p>
+                <article><h2>Release lists</h2>
+                <label for="baseline-file">Baseline · earlier manifest</label><input id="baseline-file" type="file" />
+                <label for="candidate-file">Candidate · newer manifest</label><input id="candidate-file" type="file" />
+                <div class="actions"><button id="compare-run" disabled>Compare lists</button></div>
+                <p id="compare-status" role="status">Choose both manifests to compare.</p><ul id="differences"></ul></article>
+                <p class="note">UTF-8, one top-level name per line, up to 2,048 entries and 256 KiB per file. Names are case-sensitive; UserData is excluded regardless of case. Totals cover all entries; up to 32 examples per change type are shown. Equal names do not prove equal file contents.</p>
+            </section>
+            <section id="integrity" class="view" hidden>
+                <p class="label">02 / RELEASE TOOLS</p>
+                <h1 tabindex="-1">File integrity</h1>
+                <p class="lead">
+                    Compare a local file with a trusted SHA-256 checksum. File
+                    contents never leave this window.
+                </p>
+                <article>
+                    <h2>Verify a file</h2>
+                    <label for="local-file">Local file · up to 32 MiB</label
+                    ><input type="file" id="local-file" />
+                    <label for="expected"
+                        >Expected SHA-256 <small>(optional)</small></label
+                    ><input
+                        type="text"
+                        id="expected"
+                        placeholder="64 hexadecimal characters"
+                        spellcheck="false"
+                        autocomplete="off"
+                    />
+                    <div class="actions">
+                        <button id="verify">Calculate checksum</button>
+                    </div>
+                    <p id="digest-status" role="status">
+                        Choose a local file to begin.
+                    </p>
+                    <output id="digest"></output>
+                </article>
+                <p class="note">
+                    A matching digest checks byte-for-byte integrity; it does
+                    not establish who published the file.
+                </p>
+            </section>
+            <section id="activity" class="view" hidden>
+                <p class="label">03 / WORKSPACE</p>
+                <h1 tabindex="-1">Session activity</h1>
+                <p class="lead">
+                    The last 20 completed checks in this window. No paths,
+                    checksums or file names are stored in this log.
+                </p>
+                <article>
+                    <div class="heading">
+                        <h2>Recent checks</h2>
+                        <button class="secondary" id="clear" disabled>
+                            Clear activity
+                        </button>
+                    </div>
+                    <p id="no-events">No completed checks yet.</p>
+                    <ol id="events"></ol>
+                </article>
+            </section>
+            <section id="appearance" class="view" hidden>
+                <p class="label">04 / PREFERENCES</p>
+                <h1 tabindex="-1">Appearance</h1>
+                <p class="lead">
+                    Customize this workspace without changing the inspected
+                    release.
+                </p>
+                <article>
+                    <h2>Display preferences</h2>
+                    <label for="accent">Accent color</label
+                    ><select id="accent">
+                        <option value="mint">Mint</option>
+                        <option value="azure">Azure</option>
+                        <option value="amber">Amber</option>
+                    </select>
+                    <label for="density">Report density</label
+                    ><select id="density">
+                        <option value="comfortable">Comfortable</option>
+                        <option value="compact">Compact</option>
+                    </select>
+                    <p id="prefs-status" class="note" role="status">
+                        Stored in this browser or WebView only.
+                    </p>
+                </article>
+            </section>
+        </main>
+    </body>
+</html>

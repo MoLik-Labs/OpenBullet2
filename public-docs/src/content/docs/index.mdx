@@ -1,0 +1,37 @@
+---
+title: Check a release
+description: Choose the right check for two release lists or one downloaded file.
+hero:
+  tagline: Find out which names changed between releases, or whether a download matches its published checksum.
+  actions:
+    - text: Open Public Web
+      link: ../#compare
+      icon: right-arrow
+    - text: Try a worked example
+      link: ./guides/compare-manifests/
+      variant: secondary
+---
+import Steps from '../../components/nimbus/Steps.astro';
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## What do you want to check?
+
+<CardGrid>
+  <LinkCard title="Compare two release lists" href="./guides/compare-manifests/" description="Spot added and removed names. Start with two tiny example files." />
+  <LinkCard title="Verify a downloaded file" href="./guides/verify-checksum/" description="Check the file bytes against a trusted SHA-256 digest." />
+</CardGrid>
+
+You don't need an account or an installation. Open the workspace in your browser, select your own files, and read the result in that window. The public site does **not** inspect a directory on the host. See [privacy and limits](./guides/privacy-and-limits/) before checking a large release.
+
+
+## First check: compare two example files
+
+<Steps>
+
+1. Download <a href="./examples/before.txt" download>before.txt</a> and <a href="./examples/after.txt" download>after.txt</a>. These are small synthetic release lists, not real package data.
+2. Open [Compare manifests](../#compare). Select `before.txt` as the **baseline** and `after.txt` as the **candidate**.
+3. Select **Compare lists**. Expect one added name (`new.css`), one removed name (`old.css`), and one unchanged name (`README.md`).
+
+</Steps>
+
+If the result differs, follow the [comparison guide](./guides/compare-manifests/). For offline notes or a text-only reader, use the [Markdown guide index](./llms.txt).
