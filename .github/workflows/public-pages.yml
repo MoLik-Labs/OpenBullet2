@@ -4,6 +4,7 @@ on:
   push:
     branches: [master, arena/a881a909-openbullet2]
     paths:
+      - 'public-docs/**'
       - 'molik-desktop/ui/**'
       - 'molik-desktop/scripts/package-public.py'
       - 'molik-desktop/LICENSE'
@@ -21,14 +22,27 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           persist-credentials: false
-      - name: Build only the browser-local site
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: public-docs/package-lock.json
+      - name: Build the Starlight handbook and local search index
+        working-directory: public-docs
+        env:
+          ASTRO_TELEMETRY_DISABLED: '1'
         run: |
-          python3 molik-desktop/scripts/package-public.py "$RUNNER_TEMP/site.zip"
+          npm ci
+          npm run build
+      - name: Assemble workspace and handbook
+        run: |
+          python3 molik-desktop/scripts/package-public.py --with-handbook "$RUNNER_TEMP/site.zip"
           unzip -q "$RUNNER_TEMP/site.zip" -d "$RUNNER_TEMP/public-site"
-          test -f "$RUNNER_TEMP/public-site/index.html"
+          cp -R public-docs/dist "$RUNNER_TEMP/public-site/docs"
+          python3 public-docs/check-site.py "$RUNNER_TEMP/public-site"
           grep -q 'data-mode="public"' "$RUNNER_TEMP/public-site/index.html"
           test ! -e "$RUNNER_TEMP/public-site/cgi-bin"
       - uses: actions/upload-pages-artifact@v3

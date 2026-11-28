@@ -1,0 +1,23 @@
+---
+title: Check a release
+description: Choose the right check for two release lists or one downloaded file.
+hero:
+  tagline: Find out which names changed between releases, or whether a download matches its published checksum.
+  actions:
+    - text: Open Public Web
+      link: ../#compare
+      icon: right-arrow
+    - text: Try a worked example
+      link: ./guides/compare-manifests/
+      variant: secondary
+---
+import { CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## What do you want to check?
+
+<CardGrid>
+  <LinkCard title="Compare two release lists" href="./guides/compare-manifests/" description="Spot added and removed names. Start with two tiny example files." />
+  <LinkCard title="Verify a downloaded file" href="./guides/verify-checksum/" description="Check the file bytes against a trusted SHA-256 digest." />
+</CardGrid>
+
+You don't need an account or an installation. Open the workspace in your browser, select your own files, and read the result in that window. The public site does **not** inspect a directory on the host. See [privacy and limits](./guides/privacy-and-limits/) before checking a large release.
