@@ -15,3 +15,5 @@ Leave the expected value empty if you only want to calculate a digest. A calcula
 ## If hashing is unavailable
 
 Use the HTTPS Pages address, not an insecure HTTP mirror. On a development machine, `localhost` also supports browser hashing. For a file larger than the limit, use a local OS checksum tool instead of splitting the file: hashing the pieces does not give the original file's digest.
+
+[Read this guide as Markdown](./index.md)

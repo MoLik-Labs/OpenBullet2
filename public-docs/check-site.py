@@ -38,3 +38,17 @@ for path, page in pages.items():
         if target.fragment and file in pages:
             assert unquote(target.fragment) in pages[file].ids, (path, ref, 'missing anchor')
 print(f'Validated local assets, links and anchors on {len(pages)} generated pages under {base}')
+
+# Agent-readable artifacts must point to real Markdown on the project site.
+import re
+index = (root / 'docs/llms.txt').read_text()
+markdown = sorted((root / 'docs/guides').glob('*/index.md'))
+assert markdown, 'No plain-text guides generated'
+paths = {urlsplit(u).path for u in re.findall(r'\]\((https://[^)]+)\)', index)}
+assert paths == {base + p.relative_to(root).as_posix() for p in markdown}, 'Markdown index mismatch'
+for p in markdown:
+    assert p.read_text().startswith('# ') and len(p.read_text().splitlines()) > 5, p
+    assert './index.md' in pages[p.with_name('index.html')].refs, p
+before, after = [set((root / f'docs/examples/{name}.txt').read_text().splitlines()) for name in ('before', 'after')]
+assert (after-before, before-after, before & after) == ({'new.css'}, {'old.css'}, {'README.md'})
+print(f'Validated {len(markdown)} Markdown guides, llms.txt and both walkthrough fixtures')

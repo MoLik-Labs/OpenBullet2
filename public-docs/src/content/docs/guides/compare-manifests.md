@@ -31,3 +31,5 @@ new.css
 ## If a list is rejected
 
 Use UTF-8 plain text, not a ZIP archive or directory listing with sizes. Remove duplicates, blank lines and paths such as `assets/logo.svg`. The tool identifies which input failed and does not show a partial comparison. See the [size and display limits](../privacy-and-limits/#limits).
+
+[Read this guide as Markdown](./index.md)

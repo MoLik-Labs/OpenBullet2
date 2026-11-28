@@ -20,3 +20,5 @@ The host receives ordinary requests for site assets. The **Public Web** workspac
 ## Which edition do I need?
 
 Use [Public Web](../../../#compare) for local file comparisons and checksums. To inspect the actual contents of an extracted release directory, use the private workspace or the desktop inspector. GitHub Pages serves static files; it has no package directory or inspection backend.
+
+[Read this guide as Markdown](./index.md)
