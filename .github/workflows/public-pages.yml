@@ -2,7 +2,15 @@ name: Publish Molik Public Web to Pages
 
 on:
   push:
-    branches: [master, arena/a881a909-openbullet2]
+    branches: [master]
+    paths:
+      - 'public-docs/**'
+      - 'molik-desktop/ui/**'
+      - 'molik-desktop/scripts/package-public.py'
+      - 'molik-desktop/LICENSE'
+      - '.github/workflows/public-pages.yml'
+  pull_request:
+    branches: [master]
     paths:
       - 'public-docs/**'
       - 'molik-desktop/ui/**'
@@ -13,7 +21,7 @@ on:
 
 permissions: {}
 concurrency:
-  group: molik-public-pages
+  group: molik-public-pages-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -49,6 +57,7 @@ jobs:
         with:
           path: ${{ runner.temp }}/public-site
   deploy:
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
     needs: site
     runs-on: ubuntu-latest
     permissions:
